@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISV · Cronograma de Conteúdo & Tráfego</title>
+<style>
+:root{
+  color-scheme: light;
+  --rosa:#E5A4B8;
+  --rosa-forte:#C9748E;
+  --rosa-escuro:#9C4A63;
+  --vinho:#6E2B40;
+  --nude:#F3E3DC;
+  --nude-claro:#FAF3EF;
+  --branco:#FFFFFF;
+  --texto:#4A3138;
+  --texto-suave:#856770;
+  --linha:#EAD6CE;
+  --ouro:#D9B27C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',-apple-system,Helvetica,Arial,sans-serif;background:var(--nude-claro);color:var(--texto);line-height:1.55;overflow-x:hidden}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+/* ================= HERO 3D ================= */
+.hero{
+  position:relative;
+  padding:70px 18px 90px;
+  text-align:center;
+  background:
+    radial-gradient(1200px 420px at 50% -120px, rgba(255,255,255,.55), transparent 60%),
+    linear-gradient(160deg,#F7DCE4 0%,#E5A4B8 38%,#C9748E 78%,#9C4A63 100%);
+  overflow:hidden;
+  perspective:1100px;
+}
+/* floating 3D blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.55;animation:float 9s ease-in-out infinite}
+.blob.b1{width:160px;height:160px;left:6%;top:18%;background:radial-gradient(circle at 32% 28%,#fff,#F0C4D2 55%,#D98CA6);box-shadow:0 30px 60px rgba(110,43,64,.35)}
+.blob.b2{width:90px;height:90px;right:10%;top:14%;background:radial-gradient(circle at 30% 30%,#fff,#F6D9B0 60%,var(--ouro));animation-delay:1.2s;box-shadow:0 20px 40px rgba(110,43,64,.3)}
+.blob.b3{width:120px;height:120px;right:18%;bottom:8%;background:radial-gradient(circle at 30% 30%,#fff,#F0C4D2 60%,#C9748E);animation-delay:.6s;box-shadow:0 24px 48px rgba(110,43,64,.3)}
+.blob.b4{width:70px;height:70px;left:14%;bottom:14%;background:radial-gradient(circle at 30% 30%,#fff,#F3E3DC 60%,var(--nude));animation-delay:2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+
+.hero .marca{position:relative;z-index:3;color:#fff;font-size:13px;letter-spacing:5px;text-transform:uppercase;font-weight:600;opacity:.95}
+.hero h1{position:relative;z-index:3;color:#fff;font-size:clamp(30px,6vw,52px);font-weight:800;line-height:1.05;margin:14px 0 10px;text-shadow:0 6px 24px rgba(110,43,64,.45)}
+.hero h1 span{display:block;background:linear-gradient(90deg,#fff,#FBE9DF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{position:relative;z-index:3;color:#fff;font-size:16px;font-weight:500;opacity:.95;letter-spacing:.3px}
+.hero .badge{position:relative;z-index:3;display:inline-flex;gap:8px;align-items:center;margin-top:20px;background:rgba(255,255,255,.22);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.45);color:#fff;padding:9px 18px;border-radius:40px;font-size:14px;font-weight:600}
+
+/* hero floating illustrations */
+.hero-illus{position:absolute;z-index:2;filter:drop-shadow(0 22px 30px rgba(110,43,64,.4));animation:float 7s ease-in-out infinite}
+.hero-illus.lips{left:4%;bottom:16%;width:150px;transform:rotate(-8deg)}
+.hero-illus.syringe{right:3%;top:30%;width:200px;transform:rotate(12deg);animation-delay:1.4s}
+
+/* ============ PILLARS 3D ============ */
+.pillars{position:relative;z-index:4;margin-top:22px}
+.pillars .row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pillar{
+  background:linear-gradient(180deg,#fff,#FBF2ED);
+  border:1px solid var(--linha);
+  border-radius:18px 18px 14px 14px;
+  padding:22px 14px 20px;
+  text-align:center;
+  box-shadow:0 18px 34px -14px rgba(156,74,99,.45), inset 0 1px 0 #fff;
+  transform:translateZ(0);
+  transition:.25s;
+  position:relative;
+}
+.pillar:hover{transform:translateY(-8px);box-shadow:0 28px 46px -16px rgba(156,74,99,.55)}
+.pillar .ico{width:54px;height:54px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#fff,var(--nude));box-shadow:0 10px 18px -6px rgba(156,74,99,.4), inset 0 -3px 6px rgba(156,74,99,.12)}
+.pillar h3{font-size:15px;color:var(--vinho);font-weight:700}
+.pillar p{font-size:12px;color:var(--texto-suave);margin-top:3px}
+.pillar .base{position:absolute;left:14%;right:14%;bottom:-7px;height:7px;border-radius:50%;background:rgba(156,74,99,.18);filter:blur(3px)}
+
+/* ============ GENERIC SECTIONS ============ */
+section{padding:46px 0 6px}
+.eyebrow{text-align:center;color:var(--rosa-forte);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12.5px}
+h2.tt{text-align:center;font-size:clamp(23px,4vw,32px);color:var(--vinho);font-weight:800;margin:6px 0 6px}
+.lead{text-align:center;color:var(--texto-suave);max-width:620px;margin:0 auto 8px;font-size:15px}
+
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.step{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:20px;text-align:center;box-shadow:0 10px 24px -16px rgba(156,74,99,.4)}
+.step .n{width:38px;height:38px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(135deg,var(--rosa),var(--rosa-forte));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 16px -6px rgba(156,74,99,.6)}
+.step b{color:var(--vinho);font-size:15px}
+.step p{font-size:13px;color:var(--texto-suave);margin-top:5px}
+
+.aviso{background:linear-gradient(135deg,#FBE9E7,#FBF2ED);border:1px solid #F0C4BF;border-left:5px solid #B5564E;border-radius:14px;padding:16px 18px;margin:26px 0 0;color:#7a322c;font-size:14.5px}
+.aviso strong{color:#B5564E}
+
+/* ============ CALENDAR ============ */
+.filtros{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:26px 0 8px}
+.filtros button{border:1px solid var(--rosa);background:#fff;color:var(--rosa-forte);padding:9px 18px;border-radius:30px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s}
+.filtros button:hover{background:var(--nude)}
+.filtros button.ativo{background:var(--rosa-forte);color:#fff;border-color:var(--rosa-forte);box-shadow:0 8px 18px -8px rgba(156,74,99,.7)}
+
+.mes{margin-top:22px}
+.mes h4{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--rosa-escuro);border-bottom:2px solid var(--linha);padding-bottom:7px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px}
+.card{background:#fff;border:1px solid var(--linha);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 26px -18px rgba(156,74,99,.5);transition:.2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 34px -18px rgba(156,74,99,.6)}
+.card .top{padding:11px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--nude);border-bottom:1px solid var(--linha)}
+.card .dia{font-weight:800;color:var(--vinho);font-size:13.5px;display:flex;align-items:center;gap:6px}
+.card .dia small{font-weight:600;color:var(--texto-suave);font-size:11px}
+.tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:4px 9px;border-radius:20px;color:#fff;white-space:nowrap}
+.tag.namorados{background:#C9748E}
+.tag.saojoao{background:#D98C5F}
+.tag.pais{background:#7E8FB0}
+.tag.recorrente{background:#9FAE8B}
+.card .body{padding:14px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.proc{display:inline-flex;align-items:center;gap:6px;background:var(--nude-claro);border:1px solid var(--linha);color:var(--rosa-escuro);font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:8px;width:fit-content}
+.card h3{font-size:15.5px;color:var(--texto)}
+.bloco{font-size:13px}
+.bloco .rot{font-weight:800;color:var(--rosa-forte);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:2px}
+.bloco.legenda{background:var(--nude-claro);border-radius:10px;padding:9px;font-style:italic}
+.cta{background:linear-gradient(135deg,var(--rosa),var(--rosa-forte));color:#fff;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:700;text-align:center}
+.hash{font-size:11.5px;color:var(--texto-suave)}
+
+/* ============ TRAFFIC STRATEGY ============ */
+.trafego{display:grid;gap:18px;margin-top:26px}
+.tcard{background:#fff;border:1px solid var(--linha);border-radius:18px;overflow:hidden;box-shadow:0 14px 30px -20px rgba(156,74,99,.5)}
+.tcard .head{padding:18px 22px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.tcard.namorados .head{background:linear-gradient(135deg,#C9748E,#9C4A63)}
+.tcard.saojoao .head{background:linear-gradient(135deg,#E0A06A,#C56B3C)}
+.tcard.pais .head{background:linear-gradient(135deg,#8FA0C0,#5E6F90)}
+.tcard .head h3{font-size:19px;font-weight:800}
+.tcard .head .per{font-size:12.5px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);padding:5px 12px;border-radius:30px;font-weight:600}
+.tbody{padding:20px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.titem .lab{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--rosa-forte);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.titem .val{font-size:13.5px;color:var(--texto)}
+.titem .val b{color:var(--vinho)}
+.tfunnel{padding:0 22px 22px}
+.tfunnel .frow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fstep{flex:1;min-width:130px;background:var(--nude-claro);border:1px solid var(--linha);border-radius:12px;padding:12px;text-align:center}
+.fstep .e{font-size:11px;color:var(--texto-suave);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.fstep .s{font-size:13.5px;color:var(--vinho);font-weight:700;margin-top:3px}
+.arrow{color:var(--rosa);font-size:20px;font-weight:800}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.kpi{background:#fff;border:1px solid var(--linha);border-radius:14px;padding:16px;text-align:center;box-shadow:0 10px 22px -16px rgba(156,74,99,.4)}
+.kpi .big{font-size:20px;font-weight:800;color:var(--rosa-forte)}
+.kpi .lab{font-size:12px;color:var(--texto-suave);margin-top:3px}
+
+footer{text-align:center;margin:46px 0 50px;color:var(--texto-suave);font-size:12.5px}
+.nota{max-width:760px;margin:8px auto 0;font-size:11.5px;color:var(--texto-suave);text-align:center;opacity:.85}
+@media(max-width:760px){
+  .pillars .row{grid-template-columns:repeat(2,1fr)}
+  .howto{grid-template-columns:1fr}
+  .hero-illus.lips{width:90px}.hero-illus.syringe{width:120px;right:-2%}
+}
+</style>
+</head>
+<body>
+<style>
+/* ===== ABAS ===== */
+.tabnav{position:sticky;top:0;z-index:50;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  background:rgba(250,243,239,.92);backdrop-filter:blur(8px);padding:12px 10px;border-bottom:1px solid var(--linha)}
+.tabnav button{border:1px solid var(--rosa);background:#fff;color:var(--rosa-forte);padding:10px 22px;border-radius:30px;
+  font-size:14px;font-weight:700;cursor:pointer;transition:.18s}
+.tabnav button:hover{background:var(--nude)}
+.tabnav button.ativo{background:linear-gradient(135deg,var(--rosa),var(--rosa-forte));color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px rgba(156,74,99,.7)}
+.tabpane{display:none}
+.tabpane.ativo{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ===== CAMPANHA NAMORADOS ===== */
+.camp-hero{background:linear-gradient(160deg,#F7DCE4,#C9748E 75%,#9C4A63);color:#fff;border-radius:22px;padding:38px 26px;text-align:center;margin-top:22px;box-shadow:0 22px 44px -22px rgba(156,74,99,.7)}
+.camp-hero.sj{background:linear-gradient(160deg,#F6D9B0,#E0A06A 55%,#C56B3C 100%);box-shadow:0 22px 44px -22px rgba(150,80,30,.7)}
+.bloco-sec.sj h3 .num{background:linear-gradient(135deg,#E0A06A,#C56B3C)}
+.reel.sj{border-left-color:#C56B3C}
+.copy.sj-fria .ch{background:#D98C5F}
+.copy.sj-ret .ch{background:#C56B3C}
+.camp-hero.pa{background:linear-gradient(160deg,#C9D4E8,#7E8FB0 55%,#4E5F80 100%);box-shadow:0 22px 44px -22px rgba(40,60,100,.7)}
+.bloco-sec.pa h3 .num{background:linear-gradient(135deg,#8FA0C0,#5E6F90)}
+.reel.pa{border-left-color:#5E6F90}
+.copy.pa-fria .ch{background:#7E8FB0}
+.copy.pa-ret .ch{background:#5E6F90}
+.camp-hero .ce{font-size:12px;letter-spacing:4px;text-transform:uppercase;opacity:.9;font-weight:700}
+.camp-hero h2{font-size:clamp(26px,5vw,40px);font-weight:800;margin:8px 0 6px;text-shadow:0 4px 18px rgba(110,43,64,.4)}
+.camp-hero p{font-size:15.5px;opacity:.95;max-width:620px;margin:0 auto}
+.camp-hero .meta{display:inline-block;margin-top:16px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);padding:7px 16px;border-radius:30px;font-size:13px;font-weight:600}
+.bloco-sec{background:#fff;border:1px solid var(--linha);border-radius:18px;padding:24px 24px;margin-top:18px;box-shadow:0 12px 28px -20px rgba(156,74,99,.5)}
+.bloco-sec h3{color:var(--vinho);font-size:20px;font-weight:800;display:flex;align-items:center;gap:9px}
+.bloco-sec h3 .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--rosa),var(--rosa-forte));color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bloco-sec h4{color:var(--rosa-escuro);font-size:15px;margin:16px 0 6px;font-weight:700}
+.bloco-sec p{font-size:14px;color:var(--texto);margin-top:8px}
+.bloco-sec ul{margin:8px 0 0 4px;list-style:none}
+.bloco-sec ul li{font-size:14px;color:var(--texto);padding:6px 0 6px 22px;position:relative;border-bottom:1px dashed var(--linha)}
+.bloco-sec ul li:last-child{border-bottom:none}
+.bloco-sec ul li::before{content:"💗";position:absolute;left:0;top:6px;font-size:12px}
+.reels{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}
+.reel{background:var(--nude-claro);border:1px solid var(--linha);border-left:4px solid var(--rosa-forte);border-radius:12px;padding:15px}
+.reel .rt{font-weight:800;color:var(--vinho);font-size:14.5px}
+.reel .seq{font-size:13px;color:var(--texto);margin-top:8px}
+.reel .seq b{color:var(--rosa-escuro)}
+.reel .leg{margin-top:10px;font-style:italic;font-size:13px;background:#fff;border-radius:8px;padding:8px;color:var(--texto)}
+.copies{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.copy{background:#fff;border:1px solid var(--linha);border-radius:12px;overflow:hidden}
+.copy .ch{padding:9px 13px;font-size:12px;font-weight:800;color:#fff;letter-spacing:.4px}
+.copy.fria .ch{background:#C9748E}
+.copy.retarget .ch{background:#9C4A63}
+.copy .cb{padding:13px;font-size:13px;white-space:pre-line;color:var(--texto)}
+.copy .cb .tit{font-weight:700;color:var(--rosa-escuro);display:block;margin-bottom:5px}
+.wpp{display:grid;gap:12px;margin-top:14px}
+.wmsg{background:#E8F5E9;border:1px solid #C3E6C8;border-radius:12px;border-left:4px solid #5BA86A;padding:13px 15px}
+.wmsg .wl{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#3E7A4B;margin-bottom:5px}
+.wmsg .wt{font-size:13.5px;color:#2C3E30;white-space:pre-line}
+.tabela{margin-top:14px;border:1px solid var(--linha);border-radius:12px;overflow:hidden}
+.tabela .tr{display:grid;grid-template-columns:170px 1fr;border-bottom:1px solid var(--linha)}
+.tabela .tr:last-child{border-bottom:none}
+.tabela .tr:nth-child(even){background:var(--nude-claro)}
+.tabela .tk{padding:11px 14px;font-weight:700;color:var(--rosa-escuro);font-size:13px;border-right:1px solid var(--linha)}
+.tabela .tv{padding:11px 14px;font-size:13px;color:var(--texto)}
+.check li::before{content:"✓";color:#5BA86A;font-weight:800}
+@media(max-width:600px){.tabela .tr{grid-template-columns:1fr}.tabela .tk{border-right:none;border-bottom:1px solid var(--linha)}}
+</style>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+
+  <!-- LIPS SVG -->
+  <svg class="hero-illus lips" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" aria-label="Lábios">
+    <defs>
+      <radialGradient id="lipTop" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#E97B9B"/><stop offset="100%" stop-color="#B23A5E"/></radialGradient>
+      <radialGradient id="lipBot" cx="50%" cy="70%" r="80%"><stop offset="0%" stop-color="#F58DAB"/><stop offset="60%" stop-color="#D24E74"/><stop offset="100%" stop-color="#9C2F50"/></radialGradient>
+    </defs>
+    <path d="M100 52 C70 18 40 30 18 44 C46 46 60 56 100 60 C140 56 154 46 182 44 C160 30 130 18 100 52 Z" fill="url(#lipTop)"/>
+    <path d="M18 46 C50 52 70 64 100 64 C130 64 150 52 182 46 C176 86 140 116 100 116 C60 116 24 86 18 46 Z" fill="url(#lipBot)"/>
+    <path d="M40 52 C65 60 80 62 100 62 C120 62 135 60 160 52" stroke="#7A2545" stroke-width="2.4" fill="none" opacity=".55"/>
+    <ellipse cx="74" cy="92" rx="16" ry="8" fill="#fff" opacity=".35"/>
+    <ellipse cx="128" cy="88" rx="9" ry="5" fill="#fff" opacity=".3"/>
+  </svg>
+
+  <!-- SYRINGE SVG -->
+  <svg class="hero-illus syringe" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" aria-label="Seringa">
+    <defs>
+      <linearGradient id="barrel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="45%" stop-color="#F3E3DC"/><stop offset="100%" stop-color="#D9B7A8"/></linearGradient>
+      <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F2F2F2"/><stop offset="50%" stop-color="#BFC4CC"/><stop offset="100%" stop-color="#8A929E"/></linearGradient>
+      <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3B6C8"/><stop offset="100%" stop-color="#D97A98"/></linearGradient>
+    </defs>
+    <!-- needle -->
+    <rect x="6" y="51" width="48" height="4" rx="2" fill="url(#metal)"/>
+    <!-- hub -->
+    <path d="M54 44 L70 44 L66 62 L54 62 Z" fill="url(#metal)"/>
+    <!-- barrel -->
+    <rect x="68" y="38" width="120" height="30" rx="9" fill="url(#barrel)" stroke="#CDB3A6" stroke-width="1.2"/>
+    <rect x="74" y="44" width="70" height="18" rx="7" fill="url(#fill)"/>
+    <!-- graduations -->
+    <g stroke="#B79283" stroke-width="1.4">
+      <line x1="96" y1="42" x2="96" y2="48"/><line x1="116" y1="42" x2="116" y2="48"/><line x1="136" y1="42" x2="136" y2="48"/><line x1="156" y1="42" x2="156" y2="48"/>
+    </g>
+    <!-- flange + plunger -->
+    <rect x="186" y="32" width="8" height="42" rx="3" fill="url(#metal)"/>
+    <rect x="194" y="48" width="34" height="10" rx="5" fill="url(#barrel)" stroke="#CDB3A6" stroke-width="1"/>
+    <rect x="226" y="40" width="10" height="26" rx="4" fill="url(#metal)"/>
+    <ellipse cx="120" cy="46" rx="40" ry="4" fill="#fff" opacity=".4"/>
+  </svg>
+
+  <div class="marca">ISV · Clínica e Instituto</div>
+  <h1>Conteúdo que roda<span>enquanto você descansa</span></h1>
+  <p class="sub">Vídeos gravados em bloco · 2 publicações por semana · Junho a Agosto</p>
+  <div class="badge">✨ Cronograma estratégico + plano de tráfego</div>
+</header>
+
+<!-- ===================== ABAS ===================== -->
+<div class="tabnav">
+  <button class="ativo" data-tab="cronograma">📅 Cronograma</button>
+  <button data-tab="namorados">❤️ Campanha · Dia dos Namorados</button>
+  <button data-tab="saojoao">🔥 Campanha · São João</button>
+  <button data-tab="pais">👔 Campanha · Dia dos Pais</button>
+</div>
+
+<!-- ===================== PILLARS ===================== -->
+<div class="wrap">
+ <div id="tab-cronograma" class="tabpane ativo">
+  <div class="pillars">
+    <div class="row">
+      <div class="pillar">
+        <div class="ico"><svg viewBox="0 0 40 30" width="30"><defs><radialGradient id="pl" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#E97B9B"/><stop offset="100%" stop-color="#9C2F50"/></radialGradient></defs><path d="M20 12 C13 4 7 7 3 10 C11 11 14 14 20 15 C26 14 29 11 37 10 C33 7 27 4 20 12Z" fill="url(#pl)"/><path d="M3 11 C11 13 14 16 20 16 C26 16 29 13 37 11 C34 22 28 27 20 27 C12 27 6 22 3 11Z" fill="url(#pl)"/></svg></div>
+        <h3>Preenchimento labial</h3><p>Naturalidade & harmonia</p><div class="base"></div>
+      </div>
+      <div class="pillar">
+        <div class="ico"><svg viewBox="0 0 40 40" width="28"><g stroke="#9C4A63" stroke-width="2.4" fill="none"><line x1="6" y1="34" x2="22" y2="18"/></g><rect x="20" y="10" width="14" height="9" rx="3" transform="rotate(45 27 14)" fill="#C9748E"/><rect x="29" y="4" width="6" height="8" rx="2" transform="rotate(45 32 8)" fill="#9C4A63"/></svg></div>
+        <h3>Botox</h3><p>Olhar leve & descansado</p><div class="base"></div>
+      </div>
+      <div class="pillar">
+        <div class="ico"><svg viewBox="0 0 40 40" width="26"><defs><linearGradient id="dr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3B6C8"/><stop offset="100%" stop-color="#C9748E"/></linearGradient></defs><path d="M20 5 C20 5 32 20 32 27 A12 12 0 0 1 8 27 C8 20 20 5 20 5Z" fill="url(#dr)"/><ellipse cx="16" cy="25" rx="3.5" ry="5" fill="#fff" opacity=".5"/></svg></div>
+        <h3>Limpeza premium</h3><p>Pele renovada & iluminada</p><div class="base"></div>
+      </div>
+      <div class="pillar">
+        <div class="ico"><svg viewBox="0 0 40 40" width="28"><g fill="#9C4A63"><path d="M12 30 C10 18 14 8 20 8 C26 8 30 18 28 30" fill="none" stroke="#C9748E" stroke-width="2.6" stroke-linecap="round"/><path d="M16 30 C15 20 17 12 20 12 C23 12 25 20 24 30" fill="none" stroke="#9C4A63" stroke-width="2.4" stroke-linecap="round"/></g></svg></div>
+        <h3>Capilar antiqueda</h3><p>Contra a calvície</p><div class="base"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== COMO FUNCIONA ===================== -->
+  <section>
+    <div class="eyebrow">A lógica do cronograma</div>
+    <h2 class="tt">Grava agora, publica o verão inteiro</h2>
+    <p class="lead">Tudo é gravado em bloco até o fim de julho. As publicações saem sozinhas, 2x por semana, mesmo com a equipe afastada.</p>
+    <div class="howto">
+      <div class="step"><div class="n">1</div><b>Grava em bloco</b><p>Junho e julho: todos os vídeos das 3 campanhas + recorrentes, em poucas diárias de gravação.</p></div>
+      <div class="step"><div class="n">2</div><b>Edita e agenda</b><p>Reels 9:16 legendados. Publicações programadas para terças e quintas.</p></div>
+      <div class="step"><div class="n">3</div><b>Tráfego no automático</b><p>Os principais vídeos viram anúncio. A clínica continua aparecendo durante a licença.</p></div>
+    </div>
+    <div class="aviso">⚠️ <strong>Regra de ouro:</strong> nenhum vídeo cita preço, promoção ou condição de pagamento — só procedimento, resultado e autoestima. <strong>Prazo de gravação:</strong> tudo finalizado até <strong>31 de julho</strong>.</div>
+  </section>
+
+  <!-- ===================== CALENDÁRIO ===================== -->
+  <section>
+    <div class="eyebrow">Calendário de publicações</div>
+    <h2 class="tt">2 vídeos por semana · terças e quintas</h2>
+    <div class="filtros" id="filtros">
+      <button class="ativo" data-f="todos">Todos</button>
+      <button data-f="namorados">❤️ Namorados</button>
+      <button data-f="saojoao">🔥 São João</button>
+      <button data-f="pais">👔 Dia dos Pais</button>
+      <button data-f="recorrente">✨ Recorrente</button>
+    </div>
+    <div id="calendario"></div>
+  </section>
+
+  <!-- ===================== TRÁFEGO ===================== -->
+  <section>
+    <div class="eyebrow">Estratégia de tráfego pago · Meta Ads</div>
+    <h2 class="tt">As 3 campanhas principais</h2>
+    <p class="lead">Mesma estrutura para as três: objetivo de mensagens, vídeo como criativo e WhatsApp como destino. Sem citar valores no anúncio.</p>
+    <div class="trafego" id="trafego"></div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="big">Mensagens</div><div class="lab">Objetivo da campanha (leads no WhatsApp)</div></div>
+      <div class="kpi"><div class="big">7–10 dias</div><div class="lab">Veiculação por campanha</div></div>
+      <div class="kpi"><div class="big">Reels + Stories</div><div class="lab">Posicionamentos principais</div></div>
+      <div class="kpi"><div class="big">Raio 15–20 km</div><div class="lab">Geolocalização da clínica</div></div>
+    </div>
+  </section>
+
+ </div><!-- /tab-cronograma -->
+
+ <!-- ===================== TAB: CAMPANHA NAMORADOS ===================== -->
+ <div id="tab-namorados" class="tabpane">
+
+  <div class="camp-hero">
+    <div class="ce">Campanha de Dia dos Namorados · ISV</div>
+    <h2>Cuidar é coisa de dois</h2>
+    <p>Esse Dia dos Namorados, o presente é vir juntos. Enquanto ela faz a limpeza de pele, ele faz a mesoterapia — lado a lado, no mesmo horário.</p>
+    <div class="meta">📆 Veiculação 06–12/jun · 🎯 Mensagens (WhatsApp) · 🚫 Sem preço</div>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">1</span> O conceito</h3>
+    <h4>Conceito-mãe: "Cuidar é coisa de dois"</h4>
+    <p>Presente de Dia dos Namorados quase sempre é algo que um dá pro outro. A ISV propõe algo melhor: um momento que os dois vivem juntos. Não é jantar, não é flor — é um ritual de cuidado a dois, na mesma sala, no mesmo horário. Ela renova a pele, ele renova a disposição com a mesoterapia, e os dois saem dali melhores do que entraram.</p>
+    <h4>Por que é mais forte que o presente comum</h4>
+    <ul>
+      <li>Vende experiência compartilhada, não procedimento avulso — gera memória e história pra contar, do tipo que casal posta.</li>
+      <li>Dobra o ticket por agendamento: dois procedimentos numa visita só (limpeza de pele + mesoterapia).</li>
+      <li>Tira o homem da posição de "só acompanha" e o coloca como protagonista do cuidado — público que clínicas raramente convidam.</li>
+      <li>Cria urgência natural pela data (chegar prontos até 12/jun), sem precisar de "oferta" nenhuma.</li>
+    </ul>
+    <h4>A grande ideia</h4>
+    <p>Os dois saem com cara de quem se cuidou — e ninguém vai saber dizer exatamente o quê. A pele dela com viço, ele mais disposto e renovado. O melhor presente é aquele que vocês recebem juntos.</p>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">2</span> Linha criativa · Reels do casal</h3>
+    <p>Formato já definido — Reels verticais 9:16, legenda sempre na tela, primeiros 2s já com o casal, sem preço. Três variações para testar o gancho. Destino de todos: botão "Enviar mensagem".</p>
+    <div class="reels">
+      <div class="reel">
+        <div class="rt">Reel 1 — "Lado a lado" (o conceito)</div>
+        <div class="seq"><b>0–2s:</b> casal entrando de mãos dadas, sorrindo.<br><b>2–8s:</b> split screen — ela na limpeza de pele, ele na mesoterapia, ao mesmo tempo.<br><b>8–11s:</b> os dois se olham e riem.</div>
+        <div class="leg">"O presente esse ano é vir juntos."</div>
+      </div>
+      <div class="reel">
+        <div class="rt">Reel 2 — "Ele também" (barreira masculina)</div>
+        <div class="seq">Foco no homem chegando meio sem jeito e relaxando durante a mesoterapia; ela ao lado, tranquila, na limpeza de pele.</div>
+        <div class="leg">"Cuidar não é só coisa dela. Mesoterapia pra ele, limpeza de pele pra ela."</div>
+      </div>
+      <div class="reel">
+        <div class="rt">Reel 3 — "Antes do encontro" (resultado)</div>
+        <div class="seq">Casal arrumado para um jantar, pele dela radiante, ele renovado e disposto, os dois se admirando.</div>
+        <div class="leg">"Chegaram juntos, saíram melhores. E o jantar ainda nem começou."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">3</span> Copies dos anúncios (por etapa do funil)</h3>
+    <p>Estrutura de 4 etapas — Atrair → Engajar → Reimpactar → Converter. Verba ≈60% prospecção fria / 40% retargeting (assistiu 50%+ dos Reels ou visitou o perfil nos últimos 30 dias).</p>
+    <div class="copies">
+      <div class="copy fria"><div class="ch">FRIO · A — O conceito do casal</div><div class="cb"><span class="tit">"Esse ano, o presente não é pra ela nem pra ele. É pros dois."</span>Enquanto ela faz a limpeza de pele, ele faz a mesoterapia. Lado a lado. O cuidado vira programa de casal.
+Toque em "Enviar mensagem" e agende a avaliação do casal. A agenda de junho está enchendo. 📍 [bairro/cidade]</div></div>
+      <div class="copy fria"><div class="ch">FRIO · B — Falando com ela (decisora)</div><div class="cb"><span class="tit">Chega de presente que dura um dia. 🌹</span>Que tal um momento a dois? Você na limpeza de pele, ele na mesoterapia — juntos, no mesmo horário. Um Dia dos Namorados em que os dois saem melhores do que entraram.
+Toque em "Enviar mensagem" e marque a avaliação de vocês.</div></div>
+      <div class="copy fria"><div class="ch">FRIO · C — Falando com ele</div><div class="cb"><span class="tit">Cuidar não é só coisa dela. 💪</span>Enquanto ela renova a pele, você renova a disposição com a mesoterapia. No mesmo horário, lado a lado. O presente que vocês recebem juntos.
+Toque em "Enviar mensagem" e agende a avaliação do casal.</div></div>
+      <div class="copy retarget"><div class="ch">RETARGETING · D — Reimpacto</div><div class="cb"><span class="tit">Vocês viram. Pensaram. Ainda dá tempo de vir juntos. 💗</span>Limpeza de pele pra ela, mesoterapia pra ele — no mesmo horário, antes do Dia dos Namorados. Nossa equipe explica tudo numa avaliação, sem compromisso.
+Toque em "Enviar mensagem". As vagas de junho são limitadas pela agenda.</div></div>
+      <div class="copy retarget"><div class="ch">RETARGETING · E — Prova / confiança</div><div class="cb"><span class="tit">Tem casal agendando o cuidado de junho agora. 👫</span>Profissionais especializadas, ambiente acolhedor e um momento só de vocês dois. A avaliação do casal é o primeiro passo.
+Toque em "Enviar mensagem".</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">4</span> Legendas orgânicas (Reels & Stories)</h3>
+    <h4>Reels</h4>
+    <ul>
+      <li>"O presente esse ano é vir juntos. 💗 Ela na limpeza de pele, ele na mesoterapia — lado a lado. Agenda a avaliação de vocês no direct."</li>
+      <li>"Cuidar é coisa de dois. 👫 Marca o seu amor aqui embaixo e chama a gente no direct pra vir juntos."</li>
+    </ul>
+    <h4>Sequência de Stories (4 telas com CTA)</h4>
+    <ul>
+      <li><b>Tela 1:</b> "E se o presente desse Dia dos Namorados fosse pros dois?" (enquete: Amei / Quero saber mais)</li>
+      <li><b>Tela 2:</b> Split screen real da clínica: limpeza de pele de um lado, mesoterapia do outro.</li>
+      <li><b>Tela 3:</b> "Mesmo horário, lado a lado. Dá tempo de agendar antes de 12/jun."</li>
+      <li><b>Tela 4:</b> Figurinha de link / "Enviar mensagem": "Toca aqui e venham juntos."</li>
+    </ul>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">5</span> Roteiro de WhatsApp (a conversão acontece aqui)</h3>
+    <p>O anúncio entrega o casal no WhatsApp já "morno". O objetivo é agendar a avaliação dos dois no mesmo horário — não vender preço por mensagem. Responder rápido é o que mais aumenta o agendamento.</p>
+    <div class="wpp">
+      <div class="wmsg"><div class="wl">Boas-vindas (automática)</div><div class="wt">Oi! Que bom te ver por aqui 💗 Aqui é a ISV Clínica e Instituto. Vi que você se interessou pelo nosso cuidado a dois do Dia dos Namorados — limpeza de pele pra ela e mesoterapia pra ele, no mesmo horário. 😍 Me conta: vocês querem vir juntos numa avaliação de casal? Já te encaixo no melhor dia.</div></div>
+      <div class="wmsg"><div class="wl">Qualificar e agendar</div><div class="wt">Perfeito! O primeiro passo é uma avaliação com a nossa equipe, sem compromisso — a gente entende o objetivo de cada um e monta o cuidado ideal pra vocês dois. Tenho horários essa semana em que dá pra atender os dois ao mesmo tempo. Vocês preferem de manhã ou à tarde? E qual dia fica melhor: [opção 1] ou [opção 2]?</div></div>
+      <div class="wmsg"><div class="wl">Se perguntarem o preço antes da avaliação</div><div class="wt">Ótima pergunta! Como cada pele e cada objetivo são diferentes, o valor a gente passa certinho na avaliação, depois de entender o que cada um de vocês precisa. 💗 Posso já deixar o horário de vocês reservado? Tenho [dia/horário] com os dois atendimentos no mesmo momento.</div></div>
+      <div class="wmsg"><div class="wl">Follow-up (sem resposta em 24h)</div><div class="wt">Oi! Ainda tenho um horário guardado pra vocês virem juntos essa semana 💗 As vagas de junho estão enchendo por conta do Dia dos Namorados. Quer que eu confirme?</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">6</span> Resumo operacional</h3>
+    <div class="tabela">
+      <div class="tr"><div class="tk">Objetivo</div><div class="tv">Mensagens (WhatsApp) — gerar conversas e agendamentos de casal.</div></div>
+      <div class="tr"><div class="tk">Oferta (sem preço)</div><div class="tv">Cuidado a dois: limpeza de pele (ela) + mesoterapia (ele) no mesmo horário.</div></div>
+      <div class="tr"><div class="tk">Veiculação</div><div class="tv">06 a 12 de junho (com follow-up de WhatsApp até a data).</div></div>
+      <div class="tr"><div class="tk">Público frio</div><div class="tv">Casais e mulheres 25–45. Interesses: estética, autocuidado, beleza, relacionamento, casamento. Geo: raio 15–20 km da clínica.</div></div>
+      <div class="tr"><div class="tk">Retargeting</div><div class="tv">Assistiu 50%+ dos Reels OU visitou o perfil nos últimos 30 dias.</div></div>
+      <div class="tr"><div class="tk">Verba</div><div class="tv">≈60% prospecção fria / 40% retargeting. Testar 3 criativos e pausar o de pior CTR/CPL após 48h.</div></div>
+      <div class="tr"><div class="tk">Criativo</div><div class="tv">Reels verticais do casal na clínica (split screen), legenda na tela, sem preço.</div></div>
+      <div class="tr"><div class="tk">Destino</div><div class="tv">Botão "Enviar mensagem" → WhatsApp com mensagem automática pronta.</div></div>
+      <div class="tr"><div class="tk">Métrica-chave</div><div class="tv">Custo por conversa iniciada e taxa de agendamento de casal (conversas → avaliações marcadas).</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec">
+    <h3><span class="num">7</span> Checklist antes de subir</h3>
+    <ul class="check">
+      <li>Confirmar que a agenda comporta os dois atendimentos no mesmo horário (sala/profissionais).</li>
+      <li>Botão "Enviar mensagem" testado e abrindo o WhatsApp certo.</li>
+      <li>Mensagem automática de boas-vindas configurada no WhatsApp Business.</li>
+      <li>Alguém responsável por responder em minutos durante a campanha.</li>
+      <li>3 criativos prontos (Reels 1, 2 e 3) em 9:16 com legenda na tela.</li>
+      <li>Públicos criados: frio (geo + interesses) e retargeting (engajamento + visitas).</li>
+      <li>Nenhuma peça com preço, desconto ou "promoção" — só desejo, casal e data.</li>
+    </ul>
+  </div>
+
+ </div><!-- /tab-namorados -->
+
+ <!-- ===================== TAB: CAMPANHA SÃO JOÃO ===================== -->
+ <div id="tab-saojoao" class="tabpane">
+
+  <div class="camp-hero sj">
+    <div class="ce">Campanha São João + Namorados · ISV · Aracaju</div>
+    <h2>Arraiá do Cuidado</h2>
+    <p>Em Aracaju o forró não é uma noite — é junho inteiro. São tantos forrós que não dá pra repetir o mesmo brilho. Comece o São João se cuidando.</p>
+    <div class="meta">📆 Toda a temporada de junho · 🎯 Mensagens (WhatsApp) · 🚫 Sem preço</div>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">1</span> O conceito</h3>
+    <h4>Conceito-mãe: "Pra arrasar 30 dias seguidos, comece se cuidando."</h4>
+    <p>A mulher sergipana não tem um arraiá, tem o mês inteiro — quadrilha, samba de coco, paredão, o forró de toda noite. Ela vai aparecer, ser fotografada e reencontrar muita gente o junho todo. Quem vai a um forró se arruma; quem vai a trinta precisa de pele em dia, autoestima em dia e aquele brilho que dura o mês inteiro. A ISV posiciona o cuidado estético como o primeiro passo do São João: antes do vestido, antes da fita, antes do arrasta-pé — vem a pele tratada, os lábios em destaque.</p>
+    <h4>Por que funciona (e sem preço)</h4>
+    <ul>
+      <li>Surfa em dois picos de desejo ao mesmo tempo — romance do Namorados + vaidade festiva do São João — dobrando a relevância da mensagem.</li>
+      <li>A temporada longa (30 dias) cria urgência real: quanto antes se cuidar, mais forrós aproveita radiante. O atraso é o inimigo, não o preço.</li>
+      <li>Fala com a mulher como protagonista da festa — ela não vai "de acompanhante", vai pra brilhar, dançar e ser fotografada.</li>
+      <li>Identidade regional sergipana (forró, arraiá, junho de Aracaju) gera pertencimento e muito compartilhamento.</li>
+    </ul>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">2</span> Linha criativa · Reels com clima junino</h3>
+    <p>Reels verticais 9:16, legenda na tela, sem preço, com direção de arte junina sutil (luz quente, bandeirinhas desfocadas ao fundo, tom dourado) — sem virar caricatura. Áudio em trend de forró/piseiro. Destino de todos: botão "Enviar mensagem".</p>
+    <div class="reels">
+      <div class="reel sj">
+        <div class="rt">Reel 1 — "30 forrós, 1 brilho que dura"</div>
+        <div class="seq"><b>0–2s:</b> close no rosto da cliente, pele iluminada, luzinhas de festa junina desfocadas ao fundo.<br><b>2–7s:</b> transição rápida de "looks de forró" diferentes — mesma pele radiante em cada um.<br><b>7–10s:</b> ela sorri.</div>
+        <div class="leg">"São 30 dias de forró. Comece se cuidando."</div>
+      </div>
+      <div class="reel sj">
+        <div class="rt">Reel 2 — "Antes do arraiá" (rotina)</div>
+        <div class="seq">Bastidor da limpeza de pele / cuidado facial na clínica, e depois ela pronta saindo pro forró, radiante.</div>
+        <div class="leg">"Antes da fita e do vestido, vem a pele. Chega radiante no seu arraiá."</div>
+      </div>
+      <div class="reel sj">
+        <div class="rt">Reel 3 — "Namorados + São João" (gancho duplo)</div>
+        <div class="seq">Clima romântico de Dia dos Namorados que vira festa de forró a dois; foco no viço dela.</div>
+        <div class="leg">"Mês do amor e do forró. Capricha em você primeiro. 💛"</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">3</span> Copies dos anúncios (por etapa do funil)</h3>
+    <p>Estrutura de 4 etapas — Atrair → Engajar → Reimpactar → Converter. Verba ≈60% prospecção fria / 40% retargeting (assistiu 50%+ dos Reels ou visitou o perfil nos últimos 30 dias).</p>
+    <div class="copies">
+      <div class="copy sj-fria"><div class="ch">FRIO · A — O conceito junino</div><div class="cb"><span class="tit">Em Aracaju o forró não é uma noite — é junho inteiro. 💛</span>E você vai querer estar radiante em todos eles. Pele renovada, lábios em destaque e aquela autoestima que dura os 30 dias de arraiá.
+Comece o seu São João se cuidando. Toque em "Enviar mensagem" e agende sua avaliação. As vagas de junho estão enchendo. 📍 Aracaju</div></div>
+      <div class="copy sj-fria"><div class="ch">FRIO · B — Gancho duplo (amor + forró)</div><div class="cb"><span class="tit">Mês do amor, mês do forró. E o presente é você. 🌻</span>Antes do vestido e da fita, vem a pele tratada e o brilho de quem se cuidou. Chega arrasando no Dia dos Namorados e em cada arraiá da temporada.
+Toque em "Enviar mensagem" e marque sua avaliação.</div></div>
+      <div class="copy sj-fria"><div class="ch">FRIO · C — Curto / direto (teste CTR)</div><div class="cb"><span class="tit">São 30 dias de forró pela frente. Comece se cuidando. 💛</span>Avaliação de pele e lábios na ISV. Toque em "Enviar mensagem".</div></div>
+      <div class="copy sj-ret"><div class="ch">RETARGETING · D — Urgência da temporada</div><div class="cb"><span class="tit">Você viu, pensou… e o primeiro forró já tá chegando. 💛</span>Quem se cuida agora aproveita a temporada inteira radiante — sem correria de última hora. Nossa equipe te explica tudo numa avaliação, sem compromisso.
+Toque em "Enviar mensagem". As vagas de junho são limitadas pela agenda.</div></div>
+      <div class="copy sj-ret"><div class="ch">RETARGETING · E — Prova / confiança</div><div class="cb"><span class="tit">Tem mulher de Aracaju agendando o cuidado de junho agora. 🌻</span>Profissionais especializadas, ambiente acolhedor e um plano feito pra você brilhar nos forrós. Sua avaliação é o primeiro passo.
+Toque em "Enviar mensagem".</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">4</span> Legendas orgânicas (Reels & Stories)</h3>
+    <h4>Reels</h4>
+    <ul>
+      <li>"São 30 dias de forró. 💛 Comece se cuidando pra arrasar em todos. Agende sua avaliação no direct."</li>
+      <li>"Mês do amor e do São João — e o presente é você. 🌻 Pele em dia pra cada arraiá. Manda 'FORRÓ' no direct."</li>
+    </ul>
+    <h4>Sequência de Stories (4 telas com CTA)</h4>
+    <ul>
+      <li><b>Tela 1:</b> "Quantos forrós você já tem na agenda esse mês?" (enquete: Vou em tudo / Tô me preparando)</li>
+      <li><b>Tela 2:</b> Bastidor real do cuidado facial na clínica, com clima junino.</li>
+      <li><b>Tela 3:</b> "Dá tempo de chegar radiante no primeiro arraiá. A agenda de junho tá enchendo."</li>
+      <li><b>Tela 4:</b> Figurinha de link / "Enviar mensagem": "Toca aqui e vem se cuidar."</li>
+    </ul>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">5</span> Roteiro de WhatsApp (a conversão acontece aqui)</h3>
+    <p>O anúncio entrega a mulher no WhatsApp já "morna". O objetivo é agendar a avaliação — não vender preço por mensagem. Responder rápido é o que mais aumenta o agendamento.</p>
+    <div class="wpp">
+      <div class="wmsg"><div class="wl">Boas-vindas (automática)</div><div class="wt">Oi! Que bom te ver por aqui 💛 Aqui é a ISV Clínica e Instituto. Bora chegar radiante nos forrós desse São João? 🌻 Me conta: você quer focar mais na pele, nos lábios, ou nos dois? Assim já te encaixo na melhor avaliação pra você arrasar a temporada inteira.</div></div>
+      <div class="wmsg"><div class="wl">Qualificar e agendar</div><div class="wt">Perfeito! O primeiro passo é uma avaliação com a nossa equipe, sem compromisso — a gente entende seu objetivo e monta um plano só pra você. Tenho horários essa semana, ainda dá pra chegar pronta no comecinho da temporada. Você prefere de manhã ou à tarde? E qual dia fica melhor: [opção 1] ou [opção 2]?</div></div>
+      <div class="wmsg"><div class="wl">Se perguntarem o preço antes da avaliação</div><div class="wt">Ótima pergunta! Como cada pele e cada objetivo são diferentes, o valor a gente passa certinho na avaliação, depois de entender o que você precisa. 💛 Posso já deixar seu horário reservado? Tenho [dia/horário] disponível.</div></div>
+      <div class="wmsg"><div class="wl">Follow-up (sem resposta em 24h)</div><div class="wt">Oi! Ainda tenho um horário guardado pra você essa semana 💛 As vagas de junho estão enchendo por conta do São João e do Dia dos Namorados. Quer que eu confirme pra você chegar radiante no primeiro forró?</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">6</span> Resumo operacional</h3>
+    <div class="tabela">
+      <div class="tr"><div class="tk">Objetivo</div><div class="tv">Mensagens (WhatsApp) — gerar conversas e agendamentos.</div></div>
+      <div class="tr"><div class="tk">Tema</div><div class="tv">São João + Dia dos Namorados: se cuidar para os 30 dias de forró de Aracaju.</div></div>
+      <div class="tr"><div class="tk">Veiculação</div><div class="tv">Subir já no início de junho e manter ao longo da temporada de forró (follow-up de WhatsApp).</div></div>
+      <div class="tr"><div class="tk">Público frio</div><div class="tv">Mulheres 25–45. Interesses: estética, autocuidado, beleza, forró/São João, eventos. Geo: Aracaju e região, raio 15–20 km.</div></div>
+      <div class="tr"><div class="tk">Retargeting</div><div class="tv">Assistiu 50%+ dos Reels OU visitou o perfil nos últimos 30 dias.</div></div>
+      <div class="tr"><div class="tk">Verba</div><div class="tv">≈60% prospecção fria / 40% retargeting. Testar 3 criativos e pausar o de pior CTR/CPL após 48h.</div></div>
+      <div class="tr"><div class="tk">Criativo</div><div class="tv">Reels verticais com clima junino (luz quente, bandeirinhas desfocadas), legenda na tela, sem preço.</div></div>
+      <div class="tr"><div class="tk">Destino</div><div class="tv">Botão "Enviar mensagem" → WhatsApp com mensagem automática pronta.</div></div>
+      <div class="tr"><div class="tk">Métrica-chave</div><div class="tv">Custo por conversa iniciada e taxa de agendamento (conversas → avaliações marcadas).</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec sj">
+    <h3><span class="num">7</span> Checklist antes de subir</h3>
+    <ul class="check">
+      <li>Botão "Enviar mensagem" testado e abrindo o WhatsApp certo.</li>
+      <li>Mensagem automática de boas-vindas configurada no WhatsApp Business.</li>
+      <li>Alguém responsável por responder em minutos durante a campanha.</li>
+      <li>3 criativos prontos (Reels 1, 2 e 3) em 9:16 com legenda na tela e áudio de forró/piseiro.</li>
+      <li>Públicos criados: frio (geo Aracaju + interesses) e retargeting (engajamento + visitas).</li>
+      <li>Direção de arte junina sutil — luz quente e bandeirinhas, sem virar caricatura.</li>
+      <li>Nenhuma peça com preço, desconto ou "promoção" — só desejo, forró e brilho.</li>
+    </ul>
+  </div>
+
+ </div><!-- /tab-saojoao -->
+
+ <!-- ===================== TAB: CAMPANHA DIA DOS PAIS ===================== -->
+ <div id="tab-pais" class="tabpane">
+
+  <div class="camp-hero pa">
+    <div class="ce">Campanha de Dia dos Pais · ISV</div>
+    <h2>Tem um café esperando o seu pai</h2>
+    <p>Esse Dia dos Pais, traga ele. A gente cuida do resto. Mesoterapia, transplante capilar e limpeza de pele — recebido como família.</p>
+    <div class="meta">📆 ~10–14 dias antes de 09/ago · 🎯 Mensagens (WhatsApp) · 🚫 Sem preço</div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">1</span> O conceito</h3>
+    <h4>Conceito-mãe: "Esse Dia dos Pais, traga ele."</h4>
+    <p>Pai dificilmente marca um horário pra cuidar de si. Mas ele vai, se for a filha quem leva. A ISV transforma a visita num programa afetivo: o pai chega, é recebido com um café e um quitute, senta, conversa, e descobre — sem pressão — como a mesoterapia, o transplante capilar ou a limpeza de pele podem devolver disposição e autoestima. O presente não é o procedimento: é o tempo junto e o cuidado.</p>
+    <h4>O acolhimento é a campanha</h4>
+    <ul>
+      <li>Um café fresquinho e algo pra comer esperando — o gesto simples de "senta, fica à vontade".</li>
+      <li>Recepção sem clima clínico frio: conversa, atenção, zero pressão de venda.</li>
+      <li>A família junto — a filha/o filho ao lado, registrando o momento, rindo com o pai.</li>
+      <li>A mensagem de que homem também merece se cuidar — e que aqui ele não vai se sentir deslocado.</li>
+    </ul>
+    <h4>Os três caminhos de cuidado</h4>
+    <div class="tabela">
+      <div class="tr"><div class="tk">Mesoterapia</div><div class="tv">Disposição e renovação — "voltar a se sentir com energia e bem com o espelho".</div></div>
+      <div class="tr"><div class="tk">Transplante capilar</div><div class="tv">Autoestima e confiança — "recuperar o que o tempo levou, com naturalidade".</div></div>
+      <div class="tr"><div class="tk">Limpeza de pele</div><div class="tv">Cuidado simples e poderoso — "a porta de entrada pro pai que nunca se cuidou".</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">2</span> Linha criativa · Reels do pai sendo recebido</h3>
+    <p>Reels verticais 9:16, legenda na tela, sem preço, com calor humano: foco em rosto, abraço, café, sorriso. Trilha calorosa. Destino de todos: botão "Enviar mensagem".</p>
+    <div class="reels">
+      <div class="reel pa">
+        <div class="rt">Reel 1 — "Traga ele" (o conceito)</div>
+        <div class="seq"><b>0–2s:</b> filha pegando o pai em casa, ele meio sem jeito: "pra onde a gente vai?".<br><b>2–8s:</b> chegada na clínica, recepção calorosa, um café sendo servido, ele relaxando.<br><b>8–11s:</b> pai e filha rindo juntos.</div>
+        <div class="leg">"Esse Dia dos Pais, traga ele. A gente cuida do resto."</div>
+      </div>
+      <div class="reel pa">
+        <div class="rt">Reel 2 — "O café à espera" (acolhimento)</div>
+        <div class="seq">Plano aconchegante: xícara de café, algo gostoso na mesa, ambiente acolhedor, o pai sentado à vontade conversando com a equipe.</div>
+        <div class="leg">"Aqui o seu pai é recebido como família. Café passando e tempo de qualidade."</div>
+      </div>
+      <div class="reel pa">
+        <div class="rt">Reel 3 — "Ele também merece" (barreira masculina)</div>
+        <div class="seq">Depoimento curto / cena de um pai fazendo mesoterapia ou limpeza de pele tranquilo; ao final, autoestima renovada.</div>
+        <div class="leg">"Mesoterapia, transplante capilar, limpeza de pele. Cuidar não tem idade — nem é só coisa de mulher."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">3</span> Copies dos anúncios (por etapa do funil)</h3>
+    <p>Estrutura de 4 etapas — Atrair → Engajar → Reimpactar → Converter. Verba ≈60% prospecção fria / 40% retargeting (assistiu 50%+ dos Reels ou visitou o perfil nos últimos 30 dias).</p>
+    <div class="copies">
+      <div class="copy pa-fria"><div class="ch">FRIO · A — Para a filha/o filho</div><div class="cb"><span class="tit">Ele cuidou de você a vida inteira. Esse Dia dos Pais, é a sua vez. 💙</span>Traga o seu pai pra um momento de cuidado: mesoterapia, transplante capilar ou limpeza de pele. Tem um café passando, um cantinho aconchegante e uma equipe que recebe ele como família.
+Toque em "Enviar mensagem" e agende a avaliação dele. A agenda de agosto está enchendo. 📍 [bairro/cidade]</div></div>
+      <div class="copy pa-fria"><div class="ch">FRIO · B — Foco no acolhimento</div><div class="cb"><span class="tit">Esse Dia dos Pais, presenteie com tempo e cuidado. ☕</span>Seu pai chega, é recebido com um café e algo gostoso, conversa sem pressa e descobre como se sentir mais disposto e confiante. Mesoterapia, transplante capilar e limpeza de pele — do jeito que ele merece.
+Toque em "Enviar mensagem" e marque a avaliação.</div></div>
+      <div class="copy pa-fria"><div class="ch">FRIO · C — Falando direto com o pai</div><div class="cb"><span class="tit">Cuidar de você não tem idade. 💪</span>Mais disposição, mais cabelo, pele renovada — com uma equipe que te recebe sem frescura e com um bom café. Esse Dia dos Pais, dê esse presente a você mesmo.
+Toque em "Enviar mensagem" e agende sua avaliação.</div></div>
+      <div class="copy pa-ret"><div class="ch">RETARGETING · D — Reimpacto</div><div class="cb"><span class="tit">Você pensou em levar o seu pai… e o Dia dos Pais tá chegando. 💙</span>Quem agenda agora garante o melhor horário pra esse momento em família — com café passando e tempo de qualidade. Nossa equipe explica tudo numa avaliação, sem compromisso.
+Toque em "Enviar mensagem". As vagas de agosto são limitadas pela agenda.</div></div>
+      <div class="copy pa-ret"><div class="ch">RETARGETING · E — Prova / confiança</div><div class="cb"><span class="tit">Tem filha agendando o Dia dos Pais do jeito que ele merece. ☕</span>Profissionais especializadas em mesoterapia, transplante capilar e limpeza de pele — e um acolhimento que faz toda a diferença. A avaliação é o primeiro passo.
+Toque em "Enviar mensagem".</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">4</span> Legendas orgânicas (Reels & Stories)</h3>
+    <h4>Reels</h4>
+    <ul>
+      <li>"Esse Dia dos Pais, traga ele. 💙 Café passando, equipe acolhedora e cuidado de verdade: mesoterapia, transplante capilar e limpeza de pele. Agende no direct."</li>
+      <li>"Ele te recebeu a vida toda. Que tal receber ele com um café e um momento só de vocês? ☕ Manda 'PAI' no direct."</li>
+    </ul>
+    <h4>Sequência de Stories (4 telas com CTA)</h4>
+    <ul>
+      <li><b>Tela 1:</b> "Seu pai costuma se cuidar?" (enquete: Quase nunca / Quero mudar isso)</li>
+      <li><b>Tela 2:</b> Bastidor real: o café sendo servido, o cantinho aconchegante da recepção.</li>
+      <li><b>Tela 3:</b> "Traz ele aqui. A gente recebe como família — e ainda tem café. ☕"</li>
+      <li><b>Tela 4:</b> Figurinha de link / "Enviar mensagem": "Toca aqui e agenda o Dia dos Pais dele."</li>
+    </ul>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">5</span> Roteiro de WhatsApp (a conversão acontece aqui)</h3>
+    <p>O anúncio entrega a pessoa no WhatsApp já "morna" — muitas vezes é a filha falando pelo pai. O objetivo é agendar a avaliação dele, reforçando o acolhimento. Responder rápido é o que mais aumenta o agendamento.</p>
+    <div class="wpp">
+      <div class="wmsg"><div class="wl">Boas-vindas (automática)</div><div class="wt">Oi! Que bom te ver por aqui 💙 Aqui é a ISV Clínica e Instituto. Vi que você se interessou pelo nosso Dia dos Pais. Me conta: você quer trazer o seu pai, ou o cuidado é pra você? ☕ Aqui ele é recebido com um café e muito carinho. Já te ajudo a encontrar o melhor horário.</div></div>
+      <div class="wmsg"><div class="wl">Qualificar e agendar</div><div class="wt">Que presente lindo 💙 O primeiro passo é uma avaliação com a nossa equipe, sem compromisso — a gente entende o objetivo dele (mais disposição, cabelo ou pele) e monta o cuidado ideal. E pode ficar tranquila: ele chega, toma um café, conversa sem pressa. Tenho horários essa semana. Prefere de manhã ou à tarde? Qual dia fica melhor: [opção 1] ou [opção 2]?</div></div>
+      <div class="wmsg"><div class="wl">Se perguntarem o preço antes da avaliação</div><div class="wt">Ótima pergunta! Como cada caso é diferente (mesoterapia, transplante capilar ou limpeza de pele), o valor a gente passa certinho na avaliação, depois de entender o que ele precisa. 💙 Posso já deixar o horário reservado? Tenho [dia/horário] disponível.</div></div>
+      <div class="wmsg"><div class="wl">Follow-up (sem resposta em 24h)</div><div class="wt">Oi! Ainda tenho um horário guardado pra trazer o seu pai essa semana 💙 As vagas de agosto estão enchendo por conta do Dia dos Pais. Quer que eu confirme? Tem um café esperando ele. ☕</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">6</span> Resumo operacional</h3>
+    <div class="tabela">
+      <div class="tr"><div class="tk">Objetivo</div><div class="tv">Mensagens (WhatsApp) — gerar conversas e agendamentos.</div></div>
+      <div class="tr"><div class="tk">Âncoras</div><div class="tv">Mesoterapia, transplante capilar e limpeza de pele — para o pai.</div></div>
+      <div class="tr"><div class="tk">Diferencial</div><div class="tv">Acolhimento: café e algo pra comer à espera, recepção como família, momento em família.</div></div>
+      <div class="tr"><div class="tk">Veiculação</div><div class="tv">Subir ~10–14 dias antes do Dia dos Pais (2º domingo de agosto, 09/ago) e manter até a data. 100% pré-agendado.</div></div>
+      <div class="tr"><div class="tk">Público frio</div><div class="tv">Filhas/filhos 25–55 (quem presenteia) e homens 40+ (autocuidado). Interesses: presentes, família, estética masculina, calvície/cabelo, autocuidado. Geo: raio 15–20 km.</div></div>
+      <div class="tr"><div class="tk">Retargeting</div><div class="tv">Assistiu 50%+ dos Reels OU visitou o perfil nos últimos 30 dias.</div></div>
+      <div class="tr"><div class="tk">Verba</div><div class="tv">≈60% prospecção fria / 40% retargeting. Testar 3 criativos e pausar o de pior CTR/CPL após 48h.</div></div>
+      <div class="tr"><div class="tk">Criativo</div><div class="tv">Reels verticais com calor humano (pai recebido, café, família), legenda na tela, sem preço.</div></div>
+      <div class="tr"><div class="tk">Destino</div><div class="tv">Botão "Enviar mensagem" → WhatsApp com mensagem automática pronta.</div></div>
+      <div class="tr"><div class="tk">Métrica-chave</div><div class="tv">Custo por conversa iniciada e taxa de agendamento (conversas → avaliações marcadas).</div></div>
+    </div>
+  </div>
+
+  <div class="bloco-sec pa">
+    <h3><span class="num">7</span> Checklist antes de subir</h3>
+    <ul class="check">
+      <li>Garantir que o acolhimento prometido existe de verdade: café, algo pra comer e recepção calorosa.</li>
+      <li>Botão "Enviar mensagem" testado e abrindo o WhatsApp certo.</li>
+      <li>Mensagem automática de boas-vindas configurada no WhatsApp Business.</li>
+      <li>Alguém responsável por responder em minutos durante a campanha.</li>
+      <li>3 criativos prontos (Reels 1, 2 e 3) em 9:16 com legenda na tela.</li>
+      <li>Públicos criados: frio (filhas/filhos + homens 40+) e retargeting (engajamento + visitas).</li>
+      <li>Nenhuma peça com preço, desconto ou "promoção" — só afeto, acolhimento e cuidado.</li>
+    </ul>
+  </div>
+
+ </div><!-- /tab-pais -->
+
+  <footer>
+    Cronograma estratégico ISV · Clínica e Instituto — versão Junho/2026 · visualização interativa.
+    <p class="nota">Ilustrações em SVG vetorial (lábios, seringa, gota) criadas para a identidade da marca — substituíveis por fotos reais quando disponíveis. As verbas de mídia são indicadas em proporção; defina o valor diário com base no orçamento da clínica.</p>
+  </footer>
+</div>
+
+<script>
+/* ---------------- ABAS ---------------- */
+document.querySelectorAll(".tabnav button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabnav button").forEach(x=>x.classList.remove("ativo"));
+  b.classList.add("ativo");
+  document.querySelectorAll(".tabpane").forEach(p=>p.classList.remove("ativo"));
+  document.getElementById("tab-"+b.dataset.tab).classList.add("ativo");
+  window.scrollTo({top:0,behavior:"smooth"});
+}));
+
+/* ---------------- CALENDÁRIO 2x/semana ---------------- */
+const posts = [
+// JUNHO
+{cat:"recorrente",mes:"Junho",dia:"Ter 02/jun",proc:"Limpeza premium",titulo:"Mito ou verdade: pele",
+ leg:"Mito ou verdade? 🤔 Limpeza premium serve pra todo tipo de pele. (Resposta no vídeo!)",cta:"Tire suas dúvidas →",hash:"#limpezadepele #skincare #mitoouverdade"},
+{cat:"namorados",mes:"Junho",dia:"Qui 04/jun",proc:"Preenchimento labial",titulo:"Lábios que conquistam",
+ leg:"Esse mês o amor começa no espelho 💋 Lábios naturais e harmoniosos.",cta:"Agende sua avaliação →",hash:"#preenchimentolabial #diadosnamorados"},
+{cat:"namorados",mes:"Junho",dia:"Ter 09/jun",proc:"Limpeza premium",titulo:"Pele de encontro",
+ leg:"Antes do encontro especial, sua pele merece brilhar ✨",cta:"Garanta sua pele pronta →",hash:"#limpezadepele #peleiluminada #namorados"},
+{cat:"namorados",mes:"Junho",dia:"Qui 11/jun · pré-Namorados (12)",proc:"Botox",titulo:"Seu melhor sorriso",
+ leg:"No Dia dos Namorados, o presente é se sentir bem 💖 Um olhar leve e natural.",cta:"Comece seu protocolo →",hash:"#botox #diadosnamorados #autocuidado"},
+{cat:"saojoao",mes:"Junho",dia:"Ter 16/jun",proc:"Limpeza premium",titulo:"Arraiá da pele renovada",
+ leg:"Esse São João o brilho é da sua pele 🌽🔥 Chega de cravinho!",cta:"Marque sua limpeza →",hash:"#saojoao #limpezadepele #arraia"},
+{cat:"saojoao",mes:"Junho",dia:"Qui 18/jun",proc:"Capilar antiqueda",titulo:"Cabelo no capricho",
+ leg:"Capricha no chapéu, mas o cabelo embaixo também merece 🤠",cta:"Avalie seu couro cabeludo →",hash:"#tratamentocapilar #antiqueda #saojoao"},
+{cat:"saojoao",mes:"Junho",dia:"Qua 24/jun · DIA",proc:"Institucional",titulo:"Feliz São João da ISV",
+ leg:"Que seu arraiá seja cheio de luz e autoestima! 🎉 Feliz São João 🌽",cta:"Estamos te esperando →",hash:"#saojoao #festajunina #isvclinica"},
+{cat:"recorrente",mes:"Junho",dia:"Qui 25/jun",proc:"Botox",titulo:"Quando começar o botox",
+ leg:"Botox não é só pra 'tirar ruga' 💉 Conheça o preventivo.",cta:"Comece seu protocolo →",hash:"#botox #prevencao #autoestima"},
+// JULHO
+{cat:"recorrente",mes:"Julho",dia:"Qui 02/jul",proc:"Preenchimento labial",titulo:"Resultado natural existe",
+ leg:"Preenchimento labial natural é possível, sim ✨ Volume na medida certa.",cta:"Agende sua avaliação →",hash:"#preenchimentolabial #naturalidade"},
+{cat:"recorrente",mes:"Julho",dia:"Ter 07/jul",proc:"Capilar antiqueda",titulo:"Sinais de queda",
+ leg:"Mais fios no travesseiro? 🧐 Quanto antes tratar, melhores os resultados.",cta:"Avalie seu cabelo →",hash:"#tratamentocapilar #antiqueda #calvicie"},
+{cat:"recorrente",mes:"Julho",dia:"Qui 09/jul",proc:"Limpeza premium",titulo:"Pele renovada o ano todo",
+ leg:"Cuidar da pele não tem estação ✨ Limpeza premium = brilho constante.",cta:"Marque a sua →",hash:"#limpezadepele #skincare"},
+{cat:"pais",mes:"Julho",dia:"Ter 14/jul",proc:"Capilar antiqueda",titulo:"Pai também se cuida",
+ leg:"Cuidar de quem cuida da gente 💙 Tratamento contra a calvície.",cta:"Presenteie com autocuidado →",hash:"#diadospais #tratamentocapilar #calvicie"},
+{cat:"pais",mes:"Julho",dia:"Qui 16/jul",proc:"Botox",titulo:"Naturalidade que combina com ele",
+ leg:"Botox também é pra eles 👔 Visual descansado, sem perder a naturalidade.",cta:"Agende a avaliação dele →",hash:"#diadospais #botoxmasculino"},
+{cat:"recorrente",mes:"Julho",dia:"Ter 21/jul",proc:"Botox",titulo:"Bastidores de um procedimento",
+ leg:"Por dentro da ISV 💉 Cuidado, técnica e acolhimento.",cta:"Conheça a clínica →",hash:"#bastidores #botox #isvclinica"},
+{cat:"pais",mes:"Julho",dia:"Qui 23/jul",proc:"Limpeza premium",titulo:"Presente que ele vai sentir",
+ leg:"Presenteie com cuidado de verdade 🧖‍♂️ Limpeza premium masculina.",cta:"Garanta o presente dele →",hash:"#diadospais #skincaremasculino"},
+{cat:"recorrente",mes:"Julho",dia:"Ter 28/jul",proc:"Preenchimento labial",titulo:"Antes & depois sutil",
+ leg:"A diferença está nos detalhes ✨ Harmonia com o seu rosto.",cta:"Agende sua avaliação →",hash:"#preenchimentolabial #harmonizacao"},
+{cat:"pais",mes:"Julho",dia:"Qui 30/jul",proc:"Capilar antiqueda",titulo:"Autoestima é coisa de pai",
+ leg:"Densidade, confiança e bem-estar 💙 Tratamento capilar masculino.",cta:"Avalie agora →",hash:"#diadospais #saudecapilar"},
+// AGOSTO (equipe afastada · tudo agendado)
+{cat:"pais",mes:"Agosto · pré-agendado",dia:"Ter 04/ago",proc:"Botox",titulo:"O melhor presente é se sentir bem",
+ leg:"Esse Dia dos Pais, dê o presente do autocuidado 👔",cta:"Fale com a gente →",hash:"#diadospais #botoxmasculino #presente"},
+{cat:"pais",mes:"Agosto · pré-agendado",dia:"Qui 06/ago",proc:"Limpeza premium",titulo:"Pele renovada pra ele",
+ leg:"Cuidado que renova 🧖‍♂️ Limpeza premium de presente.",cta:"Garanta o presente →",hash:"#diadospais #limpezadepele"},
+{cat:"pais",mes:"Agosto · pré-agendado",dia:"Dom 09/ago · DIA",proc:"Institucional",titulo:"Feliz Dia dos Pais",
+ leg:"A todos os pais que inspiram cuidado e amor 💙 Com carinho, equipe ISV.",cta:"Celebre com a gente →",hash:"#diadospais #amordepai #isvclinica"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Ter 11/ago",proc:"Limpeza premium",titulo:"Sua pele em dia",
+ leg:"Rotina de autocuidado não pode parar ✨",cta:"Agende a sua →",hash:"#limpezadepele #skincare"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Qui 13/ago",proc:"Botox",titulo:"Olhar leve o ano todo",
+ leg:"Naturalidade que valoriza você 💉",cta:"Comece seu protocolo →",hash:"#botox #autoestima"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Ter 18/ago",proc:"Capilar antiqueda",titulo:"Cuide do seu cabelo",
+ leg:"Tratar a queda cedo faz toda a diferença 💆",cta:"Avalie agora →",hash:"#tratamentocapilar #antiqueda"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Qui 20/ago",proc:"Preenchimento labial",titulo:"Lábios harmônicos",
+ leg:"Volume natural, do jeitinho que combina com você 💋",cta:"Agende sua avaliação →",hash:"#preenchimentolabial #naturalidade"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Ter 25/ago",proc:"Limpeza premium",titulo:"Brilho que continua",
+ leg:"Pele iluminada o mês inteiro ✨",cta:"Marque a sua →",hash:"#limpezadepele #peleiluminada"},
+{cat:"recorrente",mes:"Agosto · pré-agendado",dia:"Qui 27/ago",proc:"Institucional",titulo:"A ISV cuida de você",
+ leg:"Estética com acolhimento e resultado 💗",cta:"Conheça a clínica →",hash:"#isvclinica #estetica"}
+];
+const nomeTag={namorados:"Namorados",saojoao:"São João",pais:"Dia dos Pais",recorrente:"Recorrente"};
+const cal=document.getElementById("calendario");
+function render(f){
+  cal.innerHTML="";
+  const lista=posts.filter(p=>f==="todos"||p.cat===f);
+  const meses=[...new Set(lista.map(p=>p.mes))];
+  meses.forEach(m=>{
+    let html=`<div class="mes"><h4>${m}</h4><div class="grid">`;
+    lista.filter(p=>p.mes===m).forEach(p=>{
+      html+=`<div class="card"><div class="top"><span class="dia">📅 ${p.dia}</span><span class="tag ${p.cat}">${nomeTag[p.cat]}</span></div>
+      <div class="body"><span class="proc">● ${p.proc}</span><h3>${p.titulo}</h3>
+      <div class="bloco legenda"><span class="rot">Legenda</span>${p.leg}</div>
+      <div class="cta">${p.cta}</div><div class="hash">${p.hash}</div></div></div>`;
+    });
+    html+=`</div></div>`;
+    cal.insertAdjacentHTML("beforeend",html);
+  });
+}
+document.querySelectorAll("#filtros button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#filtros button").forEach(x=>x.classList.remove("ativo"));
+  b.classList.add("ativo");render(b.dataset.f);
+}));
+render("todos");
+
+/* ---------------- TRÁFEGO ---------------- */
+const camp=[
+{cls:"namorados",nome:"❤️ Dia dos Namorados",per:"Veicular 06–12/jun",
+ obj:"Mensagens (WhatsApp) — gerar conversas e agendamentos.",
+ pub:"Mulheres 25–45 + casais. Interesses: estética, autocuidado, beleza, casamento. Geolocalização: raio 15–20 km da clínica.",
+ retar:"Retargeting: quem assistiu 50%+ dos Reels e visitou o perfil nos últimos 30 dias.",
+ cri:"Vídeos de lábios e limpeza de pele (cards 06–12/jun). Legenda na tela, sem preço.",
+ verba:"≈40% Namorados / divididos 60% prospecção + 40% retargeting.",
+ dest:"Botão 'Enviar mensagem' → WhatsApp com mensagem pronta de avaliação."},
+{cls:"saojoao",nome:"🔥 São João",per:"Veicular 16–24/jun",
+ obj:"Mensagens (WhatsApp) + alcance local com tom festivo.",
+ pub:"Homens e mulheres 22–50. Interesses: festa junina, eventos locais, beleza, estética. Geolocalização: cidade + raio 20 km.",
+ retar:"Retargeting: engajou com posts de São João e seguidores recentes do perfil.",
+ cri:"Vídeos de limpeza de pele e capilar com pegada junina (cards 16–23/jun).",
+ verba:"≈25% do período. Reforço de alcance 2 dias antes do feriado.",
+ dest:"Botão 'Enviar mensagem' → WhatsApp + link do perfil nos Stories."},
+{cls:"pais",nome:"👔 Dia dos Pais",per:"Veicular 31/jul–09/ago (agendado)",
+ obj:"Mensagens (WhatsApp) — presente/autocuidado masculino.",
+ pub:"Mulheres 28–55 (compradoras do presente) + homens 30–55. Interesses: presentes, estética masculina, autocuidado. Raio 15–20 km.",
+ retar:"Retargeting: visitantes do perfil em julho + lista de clientes (público semelhante 1%).",
+ cri:"Vídeos masculinos: capilar, botox e limpeza (cards 31/jul–09/ago). Todos pré-gravados.",
+ verba:"≈35% do total. Subir 70% da verba na semana do feriado (03–09/ago).",
+ dest:"Botão 'Enviar mensagem' → WhatsApp. Campanha 100% agendada antes da licença."}
+];
+const tdiv=document.getElementById("trafego");
+camp.forEach(c=>{
+  tdiv.insertAdjacentHTML("beforeend",`
+  <div class="tcard ${c.cls}">
+    <div class="head"><h3>${c.nome}</h3><span class="per">📆 ${c.per}</span></div>
+    <div class="tbody">
+      <div class="titem"><div class="lab">🎯 Objetivo</div><div class="val">${c.obj}</div></div>
+      <div class="titem"><div class="lab">👥 Público frio</div><div class="val">${c.pub}</div></div>
+      <div class="titem"><div class="lab">🔁 Retargeting</div><div class="val">${c.retar}</div></div>
+      <div class="titem"><div class="lab">🎬 Criativo</div><div class="val">${c.cri}</div></div>
+      <div class="titem"><div class="lab">💰 Verba (proporção)</div><div class="val">${c.verba}</div></div>
+      <div class="titem"><div class="lab">📲 Destino</div><div class="val">${c.dest}</div></div>
+    </div>
+    <div class="tfunnel"><div class="frow">
+      <div class="fstep"><div class="e">1 · Atrair</div><div class="s">Reels/Stories</div></div>
+      <span class="arrow">→</span>
+      <div class="fstep"><div class="e">2 · Engajar</div><div class="s">Assiste o vídeo</div></div>
+      <span class="arrow">→</span>
+      <div class="fstep"><div class="e">3 · Retargeting</div><div class="s">Reimpacto</div></div>
+      <span class="arrow">→</span>
+      <div class="fstep"><div class="e">4 · Converter</div><div class="s">WhatsApp</div></div>
+    </div></div>
+  </div>`);
+});
+</script>
+</body>
+</html>
